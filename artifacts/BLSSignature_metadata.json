@@ -1,0 +1,89 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "pk",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "message",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					}
+				],
+				"name": "verifyBLSSignature",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "简化版 BLS12-381 签名验证（适配 Remix 测试，基于 blst-rs 简化）",
+			"kind": "dev",
+			"methods": {
+				"verifyBLSSignature(bytes,bytes32,bytes)": {
+					"details": "验证 BLS 签名（G1 公钥 + G2 签名 + 消息哈希）",
+					"params": {
+						"message": "消息哈希（bytes32）",
+						"pk": "BLS12-381 G1 公钥（64字节，十六进制编码）",
+						"signature": "BLS12-381 G2 签名（128字节，十六进制编码）"
+					},
+					"returns": {
+						"_0": "验证结果"
+					}
+				}
+			},
+			"title": "BLSSignature",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/1_BLSSignature.sol": "BLSSignature"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/1_BLSSignature.sol": {
+			"keccak256": "0x64789348f5e32edc3ad5731a55e99a4b8954a9f54a9a0dd26d45c39e399d5813",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fa6a72b2a9fa519db7bf8ede8f6022cb079d46ab20d141f6095a354c4090c6e3",
+				"dweb:/ipfs/QmUJCBVQXNDt2VbewJgcRbHSTQwQznjwAYgGn88R6wuHGC"
+			]
+		}
+	},
+	"version": 1
+}
