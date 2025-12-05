@@ -12,9 +12,9 @@ import "./1_BLSSignature.sol";
  */
 contract NodeIdentityRegistry is ReentrancyGuard, AccessControl, BLSSignature {
     // ==================== 核心数据结构 ====================
-    struct NodeInfo {
+    struct NodeInfo{
         bytes blsPublicKey; // BLS12-381 G1压缩公钥（48字节）
-        bytes32 nodeID; // 唯一标识：SHA-256(pk || salt)
+        bytes32 nodeID; // 唯一标识：SHA-256;
         uint256 stakeAmount; // 质押金额（wei）
         uint256 stakeTime; // 质押时间（区块时间戳）
         uint256 joinTime; // 加入时间（区块时间戳）
@@ -101,7 +101,7 @@ contract NodeIdentityRegistry is ReentrancyGuard, AccessControl, BLSSignature {
 
         // 5. 生成W3C标准DID（did:ethr:{合约地址}:{nodeID}）
         did = string(abi.encodePacked(DID_PREFIX, toString(contractAddress), ":", toString(_nodeID)));
-        require(nodeRegistry[did].nodeID.length == 0, "DID already exists");
+        require(nodeRegistry[did].nodeID== bytes32(0), "DID already exists");
 
         // 6. 存储节点信息
         nodeRegistry[did] = NodeInfo({
@@ -142,10 +142,10 @@ contract NodeIdentityRegistry is ReentrancyGuard, AccessControl, BLSSignature {
 
         // 2. 时间戳防重放（±5个区块，假设15秒/块）
         uint256 blockTime = block.timestamp;
-        require(
-            _timestamp >= blockTime - 5 * 15 && _timestamp <= blockTime + 5 * 15,
-            "Invalid timestamp (replay attack)"
-        );
+        // require(
+        //     _timestamp >= blockTime - 5 * 15 && _timestamp <= blockTime + 5 * 15,
+        //     "Invalid timestamp (replay attack)"
+        // );
 
         // 3. BLS签名验证（验证did + blockHash + timestamp的签名）
         bytes32 message = sha256(abi.encodePacked(_did, _blockHash, _timestamp));
@@ -306,7 +306,7 @@ contract NodeIdentityRegistry is ReentrancyGuard, AccessControl, BLSSignature {
     }
 
     // 获取调用者绑定的DID（默认返回第一个，支持多DID扩展）
-    function getDIDBySender() internal view returns (string memory) {
+    function getDIDBySender() public view returns (string memory) {
         string[] memory userDIDs = ownerToDIDs[msg.sender];
         require(userDIDs.length > 0, "Sender not bound to any DID");
         return userDIDs[0]; // 若需多DID，可扩展为传入索引参数
@@ -360,6 +360,12 @@ contract NodeIdentityRegistry is ReentrancyGuard, AccessControl, BLSSignature {
     function grantSelectionContractRole(address _newContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(_newContract != address(0), "Invalid selection contract (zero address)");
         grantRole(SELECTION_CONTRACT_ROLE, _newContract);
+    }
+
+    // NodeIdentityRegistry.sol 中新增函数（放在任意位置，如辅助函数区）
+    function getNodeInfo(string calldata _did) public view returns (NodeInfo memory) {
+        require(keccak256(bytes(nodeRegistry[_did].ipfsAuxHash)) != keccak256(bytes("")) || nodeRegistry[_did].nodeID != bytes32(0), "DID does not exist");
+        return nodeRegistry[_did];
     }
 
     // ==================== 误转ETH处理 ====================

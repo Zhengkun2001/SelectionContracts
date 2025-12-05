@@ -1,0 +1,109 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "newRoot",
+						"type": "bytes32"
+					}
+				],
+				"name": "MerkleRootUpdated",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "finalMerkleRoot",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "participant",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "proof",
+						"type": "bytes32[]"
+					}
+				],
+				"name": "isFinalParticipant",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "newRoot",
+						"type": "bytes32"
+					}
+				],
+				"name": "updateMerkleRoot",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/ParticipantVerifier.sol": "ParticipantVerifier"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/ParticipantVerifier.sol": {
+			"keccak256": "0x3d5682387304e4c9b37ea756c45bfd452e5bdc04da865a83b5ca9dad92063228",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ff4941dff74da0b94e02a6b5bfc4511f4ad3b1d0e40ed0f017893cde3f3d46e1",
+				"dweb:/ipfs/Qmcoxn7M43rqpH3CdRk4NK5bibMbZgAN5r3YMaJRtmedAh"
+			]
+		}
+	},
+	"version": 1
+}

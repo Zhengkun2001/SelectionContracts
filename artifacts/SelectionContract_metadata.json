@@ -8,13 +8,23 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address payable",
+						"name": "_nodeRegistry",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_incentiveToken",
+						"type": "address"
+					},
+					{
 						"internalType": "uint256",
-						"name": "_baseMinStake",
+						"name": "_baseIncentive",
 						"type": "uint256"
 					},
 					{
 						"internalType": "address",
-						"name": "_selectionContract",
+						"name": "_calculator",
 						"type": "address"
 					}
 				],
@@ -46,15 +56,34 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint256",
-						"name": "oldBaseMinStake",
+						"name": "epoch",
 						"type": "uint256"
 					},
 					{
 						"indexed": false,
+						"internalType": "bytes32",
+						"name": "weightHash",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
 						"internalType": "uint256",
-						"name": "newBaseMinStake",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "AHPWeightUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "epoch",
 						"type": "uint256"
 					},
 					{
@@ -64,7 +93,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "BaseMinStakeUpdated",
+				"name": "EpochStarted",
 				"type": "event"
 			},
 			{
@@ -78,14 +107,14 @@
 					},
 					{
 						"indexed": true,
-						"internalType": "bytes",
-						"name": "blsPk",
-						"type": "bytes"
+						"internalType": "uint256",
+						"name": "epoch",
+						"type": "uint256"
 					},
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "stakeAmount",
+						"name": "amount",
 						"type": "uint256"
 					},
 					{
@@ -95,138 +124,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "DIDCreated",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "unlockTime",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "DIDRevoked",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "bool",
-						"name": "isVerified",
-						"type": "bool"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "IdentityVerified",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "reason",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "violationCount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "NodeFrozen",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "NodeUnfrozen",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "bytes",
-						"name": "oldPk",
-						"type": "bytes"
-					},
-					{
-						"indexed": false,
-						"internalType": "bytes",
-						"name": "newPk",
-						"type": "bytes"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "PublicKeyUpdated",
+				"name": "IncentiveClaimed",
 				"type": "event"
 			},
 			{
@@ -309,15 +207,15 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "epoch",
+						"type": "uint256"
 					},
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "confiscatedAmount",
-						"type": "uint256"
+						"internalType": "bytes32",
+						"name": "merkleRoot",
+						"type": "bytes32"
 					},
 					{
 						"indexed": false,
@@ -326,33 +224,34 @@
 						"type": "uint256"
 					}
 				],
-				"name": "StakeConfiscated",
+				"name": "SelectionResultUpdated",
 				"type": "event"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
+				"inputs": [],
+				"name": "ADMIN_ROLE",
+				"outputs": [
 					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "withdrawAmount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
 					}
 				],
-				"name": "StakeWithdrawn",
-				"type": "event"
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "CALCULATOR_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -369,20 +268,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "DID_PREFIX",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "FREEZE_DURATION",
+				"name": "EPOCH_DURATION",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -395,33 +281,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "SELECTION_CONTRACT_ROLE",
-				"outputs": [
-					{
-						"internalType": "bytes32",
-						"name": "",
-						"type": "bytes32"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "STAKING_LOCK_PERIOD",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "VIOLATION_LIMIT",
+				"name": "baseIncentive",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -436,169 +296,33 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_epoch",
 						"type": "uint256"
-					}
-				],
-				"name": "activeCandidatePool",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "baseMinStake",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "contractAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "bytes",
-						"name": "_blsPk",
-						"type": "bytes"
 					},
 					{
-						"internalType": "bytes32",
-						"name": "_nodeID",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "_salt",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "bytes",
-						"name": "_signature",
-						"type": "bytes"
-					},
-					{
-						"internalType": "string",
-						"name": "_ipfsAuxHash",
-						"type": "string"
-					}
-				],
-				"name": "createDID",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "did",
-						"type": "string"
-					}
-				],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"name": "didFrozenUntil",
-				"outputs": [
-					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_totalScore",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"name": "didToCandidateIndex",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"name": "didWithdrawUnlockTime",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "_did",
-						"type": "string"
 					},
 					{
-						"internalType": "string",
-						"name": "_reason",
-						"type": "string"
+						"internalType": "bytes32[]",
+						"name": "_merkleProof",
+						"type": "bytes32[]"
 					}
 				],
-				"name": "freezeAndConfiscateStake",
+				"name": "claimIncentive",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "getDIDBySender",
+				"name": "currentEpoch",
 				"outputs": [
 					{
-						"internalType": "string",
+						"internalType": "uint256",
 						"name": "",
-						"type": "string"
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -607,59 +331,60 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "_did",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
-				"name": "getNodeInfo",
+				"name": "epochAHPWeightHash",
 				"outputs": [
 					{
-						"components": [
-							{
-								"internalType": "bytes",
-								"name": "blsPublicKey",
-								"type": "bytes"
-							},
-							{
-								"internalType": "bytes32",
-								"name": "nodeID",
-								"type": "bytes32"
-							},
-							{
-								"internalType": "uint256",
-								"name": "stakeAmount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "stakeTime",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "joinTime",
-								"type": "uint256"
-							},
-							{
-								"internalType": "enum NodeIdentityRegistry.Status",
-								"name": "status",
-								"type": "uint8"
-							},
-							{
-								"internalType": "uint256",
-								"name": "violationCount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "ipfsAuxHash",
-								"type": "string"
-							}
-						],
-						"internalType": "struct NodeIdentityRegistry.NodeInfo",
+						"internalType": "bytes32",
 						"name": "",
-						"type": "tuple"
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "epochMerkleRoot",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "epochSelectedDIDs",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -687,6 +412,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "_calculator",
+						"type": "address"
+					}
+				],
+				"name": "grantCalculatorRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -698,19 +436,6 @@
 					}
 				],
 				"name": "grantRole",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_newContract",
-						"type": "address"
-					}
-				],
-				"name": "grantSelectionContractRole",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -745,73 +470,45 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
+				"name": "incentiveClaimed",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "incentiveToken",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "nodeRegistry",
 				"outputs": [
 					{
-						"internalType": "bytes",
-						"name": "blsPublicKey",
-						"type": "bytes"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "nodeID",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "uint256",
-						"name": "stakeAmount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "stakeTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "joinTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum NodeIdentityRegistry.Status",
-						"name": "status",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint256",
-						"name": "violationCount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "ipfsAuxHash",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
+						"internalType": "contract NodeIdentityRegistry",
 						"name": "",
 						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "ownerToDIDs",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -820,20 +517,19 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes",
-						"name": "",
-						"type": "bytes"
-					}
-				],
-				"name": "pkToDID",
-				"outputs": [
+						"internalType": "string",
+						"name": "_did",
+						"type": "string"
+					},
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "_reason",
 						"type": "string"
 					}
 				],
-				"stateMutability": "view",
+				"name": "punishViolation",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -855,13 +551,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "revokeDID",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "bytes32",
@@ -875,6 +564,13 @@
 					}
 				],
 				"name": "revokeRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "startNewEpoch",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -899,120 +595,49 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "unfreezeDID",
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_newBaseIncentive",
+						"type": "uint256"
+					}
+				],
+				"name": "updateBaseIncentive",
 				"outputs": [],
-				"stateMutability": "payable",
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_newBaseMinStake",
+						"name": "_epoch",
 						"type": "uint256"
-					}
-				],
-				"name": "updateBaseMinStake",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "bytes",
-						"name": "_newBlsPk",
-						"type": "bytes"
-					},
-					{
-						"internalType": "bytes",
-						"name": "_signature",
-						"type": "bytes"
-					}
-				],
-				"name": "updatePublicKey",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "bytes",
-						"name": "pk",
-						"type": "bytes"
 					},
 					{
 						"internalType": "bytes32",
-						"name": "message",
+						"name": "_merkleRoot",
 						"type": "bytes32"
 					},
 					{
-						"internalType": "bytes",
-						"name": "signature",
-						"type": "bytes"
-					}
-				],
-				"name": "verifyBLSSignature",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "_did",
-						"type": "string"
-					},
-					{
-						"internalType": "bytes",
-						"name": "_proof",
-						"type": "bytes"
+						"internalType": "string[]",
+						"name": "_selectedDIDs",
+						"type": "string[]"
 					},
 					{
 						"internalType": "bytes32",
-						"name": "_blockHash",
+						"name": "_ahpWeightHash",
 						"type": "bytes32"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_timestamp",
-						"type": "uint256"
 					}
 				],
-				"name": "verifyIdentity",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "isVerified",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawStake",
+				"name": "uploadSelectionResult",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"stateMutability": "payable",
-				"type": "receive"
 			}
 		],
 		"devdoc": {
-			"details": "公有链环境下的节点身份确权智能合约（DID+资产质押） 适配 Dynamic-EquiSelect 方案，支持身份注册、验证、冻结、罚没、注销",
+			"details": "Dynamic-EquiSelect核心筛选合约，整合链下算法结果+链上确权验证",
 			"errors": {
 				"AccessControlBadConfirmation()": [
 					{
@@ -1038,6 +663,14 @@
 			},
 			"kind": "dev",
 			"methods": {
+				"claimIncentive(uint256,uint256,bytes32[])": {
+					"details": "节点申领Epoch激励（梯度激励：baseIncentive * 综合分/10000）",
+					"params": {
+						"_epoch": "周期编号",
+						"_merkleProof": "Merkle验证证明",
+						"_totalScore": "链下计算的综合分（放大10000倍，如0.85→8500）"
+					}
+				},
 				"getRoleAdmin(bytes32)": {
 					"details": "Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}."
 				},
@@ -1047,28 +680,36 @@
 				"hasRole(bytes32,address)": {
 					"details": "Returns `true` if `account` has been granted `role`."
 				},
+				"punishViolation(string,string)": {
+					"details": "罚没违规节点（调用确权合约的冻结+罚没）",
+					"params": {
+						"_did": "违规节点DID",
+						"_reason": "违规原因"
+					}
+				},
 				"renounceRole(bytes32,address)": {
 					"details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event."
 				},
 				"revokeRole(bytes32,address)": {
 					"details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event."
 				},
+				"startNewEpoch()": {
+					"details": "启动新Epoch"
+				},
 				"supportsInterface(bytes4)": {
 					"details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
 				},
-				"verifyBLSSignature(bytes,bytes32,bytes)": {
-					"details": "验证 BLS 签名（G1 公钥 + G2 签名 + 消息哈希）",
+				"uploadSelectionResult(uint256,bytes32,string[],bytes32)": {
+					"details": "上传Epoch筛选结果（链下计算节点调用）",
 					"params": {
-						"message": "消息哈希（bytes32）",
-						"pk": "BLS12-381 G1 公钥（64字节，十六进制编码）",
-						"signature": "BLS12-381 G2 签名（128字节，十六进制编码）"
-					},
-					"returns": {
-						"_0": "验证结果"
+						"_ahpWeightHash": "AHP权重哈希（keccak256(权重数组)）",
+						"_epoch": "周期编号",
+						"_merkleRoot": "最终选中节点的Merkle Root",
+						"_selectedDIDs": "最终选中的DID列表"
 					}
 				}
 			},
-			"title": "NodeIdentityRegistry",
+			"title": "SelectionContract",
 			"version": 1
 		},
 		"userdoc": {
@@ -1079,7 +720,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/3_NodeIdentityRegistry.sol": "NodeIdentityRegistry"
+			"contracts/4_SelectionContract.sol": "SelectionContract"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -1115,6 +756,14 @@
 			"urls": [
 				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
 				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
 			]
 		},
 		"@openzeppelin/contracts/utils/Context.sol": {
@@ -1155,6 +804,14 @@
 			"urls": [
 				"bzz-raw://67cda9acfdccadebb3ba1055bbed2e5cc72eae70ef5477bef419692208279598",
 				"dweb:/ipfs/QmR6DHWQeb2jLH6YVy31s9eKQZEFxX7vFJArg4hi9U4JoJ"
+			]
+		},
+		"contracts/4_SelectionContract.sol": {
+			"keccak256": "0x0d5ba2b37a7101a33f85b16d0f3a12f2bc031f95891ffb4acd7cb1825a92aded",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ca86ee1d80dca14a7c164aaa905d7262c84b1a3f944dc328d4832540ec86c8d4",
+				"dweb:/ipfs/QmUq482UhVkbSKEHKeqhBKBj6Ym3U7b6nA9CGygcErcKM2"
 			]
 		}
 	},
